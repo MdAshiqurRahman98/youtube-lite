@@ -1,4 +1,4 @@
-# youtube_lite
+# YouTube Lite
 
 A new Flutter project.
 
