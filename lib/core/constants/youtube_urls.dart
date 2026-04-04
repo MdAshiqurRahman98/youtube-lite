@@ -1,5 +1,6 @@
 class YoutubeUrls {
   YoutubeUrls._();
+
   static const String base = 'https://m.youtube.com';
 
   // Primary navigation
