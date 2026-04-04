@@ -20,10 +20,16 @@ class FullScreenLoadingOverlay extends StatelessWidget {
         child,
         if (isLoading)
           Container(
-            height: .infinity,
-            width: .infinity,
+            height: double.infinity,
+            width: double.infinity,
             color: AppColors.surfaceDark,
-            child: Center(child: loadingWidget ?? CircularProgressIndicator()),
+            child: Center(
+              child:
+                  loadingWidget ??
+                  CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation(Colors.white),
+                  ),
+            ),
           ),
       ],
     );
