@@ -1,5 +1,6 @@
 class AppStrings {
   AppStrings._();
+
   // App
   static const String appName = 'YouTube Lite';
 
