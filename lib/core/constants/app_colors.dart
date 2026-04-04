@@ -1,7 +1,8 @@
-import 'package:flutter/animation.dart';
+import 'package:flutter/material.dart';
 
 class AppColors {
   AppColors._();
+
   // Brand
   static const Color youtubePrimary = Color(0xFFFF0000);
   static const Color youtubeRed = Color(0xFFCC0000);
