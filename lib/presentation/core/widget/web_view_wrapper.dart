@@ -13,8 +13,9 @@ class WebViewWrapper extends StatefulWidget {
 }
 
 class _WebViewWrapperState extends State<WebViewWrapper> {
-  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
   late final WebViewController _controller;
+  final ValueNotifier<bool> _isLoading = ValueNotifier(true);
+
   @override
   void initState() {
     super.initState();
@@ -22,22 +23,23 @@ class _WebViewWrapperState extends State<WebViewWrapper> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onProgress: (progress) => _isLoading.value,
-          onPageFinished: (String url) {
+          onPageStarted: (_) => _isLoading.value = true,
+          onPageFinished: (_) {
             _isLoading.value = false;
-            //             _controller.runJavaScript('''
-            // var navBar =  document.querySelector('ytm-pivot-bar-renderer');
-            // if(navbar) navBar.style.display = 'none';
-
-            // ''');
             _controller.runJavaScript('''
-                        var navBar = document.querySelector('ytm-mobile-topbar-renderer');
-                        if (navBar) navBar.style.display = 'none';
-                      ''');
+              var navBar = document.querySelector('ytm-pivot-bar-renderer');
+              if (navBar) navBar.style.display = 'none';
+            ''');
           },
         ),
       )
       ..loadRequest(Uri.parse(widget.url));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _isLoading.dispose();
   }
 
   @override
@@ -47,20 +49,22 @@ class _WebViewWrapperState extends State<WebViewWrapper> {
       builder: (context, isLoading, child) {
         return FullScreenLoadingOverlay(
           isLoading: isLoading,
+          loadingWidget: CircularProgressIndicator(
+            color: AppColors.youtubePrimary,
+          ),
           child: Scaffold(
             appBar: AppBar(
+              leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(Icons.arrow_back_ios),
+              ),
               title: Text(
                 widget.title,
                 style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 20,
+                  color: AppColors.textPrimary,
+                  fontSize: 16,
+                  fontWeight: .w600,
                 ),
-              ),
-              backgroundColor: AppColors.backgroundDark,
-              leading: IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: Icon(Icons.arrow_back, color: Colors.white),
               ),
             ),
             body: WebViewWidget(controller: _controller),
